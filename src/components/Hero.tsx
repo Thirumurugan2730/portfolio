@@ -1,17 +1,18 @@
 import React from 'react';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight, Download, Code2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PORTFOLIO_CONFIG } from '../config/portfolio';
 
 interface HeroProps {
   onDownloadCV: () => void;
+  onReplayIntro?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onDownloadCV }) => {
+export const Hero: React.FC<HeroProps> = ({ onDownloadCV, onReplayIntro }) => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden animate-fadeIn">
       {/* Subtle Background Ambient Gradients */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[140px] animate-pulse-slow" />
@@ -53,6 +54,20 @@ export const Hero: React.FC<HeroProps> = ({ onDownloadCV }) => {
             <span>Download CV</span>
           </button>
         </div>
+
+        {/* Subtle Replay C++ Intro Trigger */}
+        {onReplayIntro && (
+          <div className="mt-14 opacity-50 hover:opacity-100 transition-opacity">
+            <button
+              onClick={onReplayIntro}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono text-slate-400 hover:text-slate-200 bg-slate-900/60 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 transition cursor-pointer"
+              title="Re-run C++ compilation intro"
+            >
+              <Code2 className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Replay C++ Code</span>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
