@@ -9,8 +9,8 @@
   body {
     margin: 0;
     padding: 0;
-    background-color: #0b0f19;
-    color: #f1f5f9;
+    background-color: #0b0a10;
+    color: #fdf2f8;
     overflow-x: hidden;
   }
 }
@@ -19,11 +19,11 @@
 @keyframes pulseSlow {
   0%, 100% {
     transform: scale(1) translate(0, 0);
-    opacity: 0.4;
+    opacity: 0.45;
   }
   50% {
-    transform: scale(1.08) translate(10px, -15px);
-    opacity: 0.65;
+    transform: scale(1.1) translate(10px, -12px);
+    opacity: 0.7;
   }
 }
 
@@ -61,14 +61,14 @@
 
 /* Glassmorphism */
 .glass-panel {
-  background: rgba(17, 24, 39, 0.6);
+  background: rgba(22, 18, 30, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(244, 63, 94, 0.15);
 }
 
 .glass-pill {
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
