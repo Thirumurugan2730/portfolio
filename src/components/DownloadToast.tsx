@@ -13,7 +13,7 @@ export const DownloadToast: React.FC<DownloadToastProps> = ({ isOpen, onClose })
 
     const timer = setTimeout(() => {
       onClose();
-    }, 5500);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, [isOpen, onClose]);
@@ -24,10 +24,10 @@ export const DownloadToast: React.FC<DownloadToastProps> = ({ isOpen, onClose })
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-6 right-6 z-50 max-w-md w-[calc(100vw-3rem)] backdrop-blur-xl bg-[#0f0d18]/95 border border-emerald-500/40 rounded-2xl p-4 shadow-2xl shadow-black/80 transition-all duration-300 animate-float-soft"
+      className="fixed bottom-6 right-6 z-50 max-w-md w-[calc(100vw-3rem)] backdrop-blur-2xl bg-zinc-900/95 border border-zinc-700/80 rounded-2xl p-4 shadow-2xl shadow-black/90 transition-all duration-300 animate-float-gentle"
     >
       <div className="flex items-start gap-3">
-        <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shrink-0">
+        <div className="p-2 rounded-xl bg-zinc-800 text-zinc-200 border border-zinc-700 shrink-0">
           <FileText className="w-5 h-5" />
         </div>
 
@@ -36,17 +36,17 @@ export const DownloadToast: React.FC<DownloadToastProps> = ({ isOpen, onClose })
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Download Triggered</span>
           </div>
-          <h4 className="text-sm font-semibold text-amber-200">
+          <h4 className="text-sm font-semibold text-zinc-100">
             {PORTFOLIO_CONFIG.cv.fileName}
           </h4>
-          <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+          <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
             {PORTFOLIO_CONFIG.cv.notice}
           </p>
         </div>
 
         <button
           onClick={onClose}
-          className="text-slate-400 hover:text-slate-200 p-1 rounded-lg hover:bg-slate-800/80 transition-colors cursor-pointer"
+          className="text-zinc-500 hover:text-zinc-200 p-1 rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer"
           aria-label="Close notification"
         >
           <X className="w-4 h-4" />
