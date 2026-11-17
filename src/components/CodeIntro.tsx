@@ -29,22 +29,22 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Fast & energetic typing effect
+  // Balanced, natural typing speed (slightly dialed back for perfect readability)
   useEffect(() => {
     if (currentLineIndex >= CPP_CODE_LINES.length) {
       setIsTypingDone(true);
-      // No pause: immediately compile and run right after code is typed!
+      // Immediately compile and run without awkward delay
       timerRef.current = setTimeout(() => {
         handleCompileAndRun();
-      }, 150);
+      }, 180);
       return;
     }
 
     const targetLine = CPP_CODE_LINES[currentLineIndex];
 
     if (currentCharIndex < targetLine.length) {
-      // Fast typing speed: 14ms to 24ms per character
-      const speed = targetLine.length === 0 ? 20 : Math.floor(Math.random() * 10) + 14;
+      // Balanced speed: 28ms to 38ms per keystroke
+      const speed = targetLine.length === 0 ? 30 : Math.floor(Math.random() * 10) + 28;
       timerRef.current = setTimeout(() => {
         setDisplayedLines(prev => {
           const next = [...prev];
@@ -54,12 +54,12 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
         setCurrentCharIndex(prev => prev + 1);
       }, speed);
     } else {
-      // Snappy line switch
+      // Clean, brief pause between lines (130ms)
       timerRef.current = setTimeout(() => {
         setDisplayedLines(prev => [...prev, '']);
         setCurrentLineIndex(prev => prev + 1);
         setCurrentCharIndex(0);
-      }, 70);
+      }, 130);
     }
 
     return () => {
@@ -311,7 +311,7 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
             </div>
           </div>
 
-          {/* Code Editor Body - ZERO HORIZONTAL SCROLLBAR, Fast Natural Typing */}
+          {/* Code Editor Body - Perfectly Balanced Cadence */}
           <div className="p-6 sm:p-8 font-mono text-sm sm:text-base lg:text-lg leading-relaxed bg-[#0c0a14] text-slate-100 overflow-x-hidden min-h-[300px] sm:min-h-[340px]">
             {displayedLines.map((line, idx) => (
               <div key={idx} className="flex items-start group">
