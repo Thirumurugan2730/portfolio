@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Terminal, CheckCircle2, FastForward } from 'lucide-react';
+import { Play, Sparkles, FastForward, Coffee, Rocket, CheckCircle } from 'lucide-react';
 
 interface CodeIntroProps {
   onComplete: () => void;
@@ -7,13 +7,23 @@ interface CodeIntroProps {
 
 const CPP_CODE_LINES = [
   '#include <iostream>',
-  '#include <string>',
+  '#include <superpowers>',
   '',
   'int main() {',
+  '    // Warning: Highly passionate engineer ahead! ⚡',
   '    std::cout << "Thirumurugan S" << std::endl;',
-  '    std::cout << "Final Year B.E. Computer Science and Engineering Student" << std::endl;',
-  '    return 0;',
+  '    std::cout << "Final Year B.E. CSE Student" << std::endl;',
+  '    return 0; // 0 errors, 0 warnings, 100% vibes 😎',
   '}'
+];
+
+const FUNNY_OUTPUTS = [
+  { text: '☕ Brewing freshly roasted coffee & squashing bugs...', icon: 'coffee' },
+  { text: '⚡ Overclocking brain cells to 5.0 GHz... Done!', icon: 'sparkle' },
+  { text: '🎯 Output:', icon: 'output' },
+  { text: '   ➜ Thirumurugan S', icon: 'name' },
+  { text: '   ➜ Final Year B.E. Computer Science and Engineering Student', icon: 'role' },
+  { text: '🚀 All systems GO! Teleporting to Portfolio in 3.. 2.. 1..', icon: 'rocket' }
 ];
 
 export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
@@ -22,27 +32,26 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
   const [displayedLines, setDisplayedLines] = useState<string[]>(['']);
   const [isTypingDone, setIsTypingDone] = useState(false);
   const [isCompiling, setIsCompiling] = useState(false);
-  const [compileOutput, setCompileOutput] = useState<string[]>([]);
+  const [outputStep, setOutputStep] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
-  
+
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Typing effect
+  // Typing simulation
   useEffect(() => {
     if (currentLineIndex >= CPP_CODE_LINES.length) {
       setIsTypingDone(true);
-      // Automatically trigger compile & run 800ms after typing finishes
+      // Auto-trigger Compile & Run after typing finishes
       timerRef.current = setTimeout(() => {
         handleCompileAndRun();
-      }, 900);
+      }, 700);
       return;
     }
 
     const targetLine = CPP_CODE_LINES[currentLineIndex];
 
     if (currentCharIndex < targetLine.length) {
-      // Type next char
-      const speed = targetLine.length === 0 ? 50 : Math.floor(Math.random() * 15) + 20; // 20-35ms
+      const speed = targetLine.length === 0 ? 30 : Math.floor(Math.random() * 12) + 16;
       timerRef.current = setTimeout(() => {
         setDisplayedLines(prev => {
           const next = [...prev];
@@ -52,12 +61,11 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
         setCurrentCharIndex(prev => prev + 1);
       }, speed);
     } else {
-      // Move to next line
       timerRef.current = setTimeout(() => {
         setDisplayedLines(prev => [...prev, '']);
         setCurrentLineIndex(prev => prev + 1);
         setCurrentCharIndex(0);
-      }, 70);
+      }, 50);
     }
 
     return () => {
@@ -70,34 +78,26 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
     setIsCompiling(true);
     if (timerRef.current) clearTimeout(timerRef.current);
 
-    // Show full code immediately if user clicked run early
+    // Show full code immediately
     setDisplayedLines(CPP_CODE_LINES);
     setIsTypingDone(true);
 
-    // Stage 1: Compiling
-    setCompileOutput(['$ g++ -O3 main.cpp -o portfolio']);
-    
-    setTimeout(() => {
-      setCompileOutput(prev => [...prev, 'Compiling main.cpp... [Build Finished: 0 errors]']);
-    }, 450);
+    // Stagger funny outputs
+    setOutputStep(1);
 
-    // Stage 2: Running output
-    setTimeout(() => {
-      setCompileOutput(prev => [
-        ...prev,
-        '$ ./portfolio',
-        'Thirumurugan S',
-        'Final Year B.E. Computer Science and Engineering Student'
-      ]);
-    }, 950);
+    setTimeout(() => setOutputStep(2), 400);
+    setTimeout(() => setOutputStep(3), 850);
+    setTimeout(() => setOutputStep(4), 1250);
+    setTimeout(() => setOutputStep(5), 1650);
+    setTimeout(() => setOutputStep(6), 2100);
 
-    // Stage 3: Smooth transition to the portfolio
+    // Transition to main screen
     setTimeout(() => {
       setIsExiting(true);
       setTimeout(() => {
         onComplete();
-      }, 550);
-    }, 1800);
+      }, 500);
+    }, 3100);
   };
 
   const handleSkip = () => {
@@ -107,7 +107,7 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
     }, 200);
   };
 
-  // Syntax highlighter helper
+  // Syntax highlighting
   const renderHighlightedLine = (line: string) => {
     if (!line) return <span>&nbsp;</span>;
 
@@ -115,58 +115,63 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
       const parts = line.split(' ');
       return (
         <span>
-          <span className="text-pink-400 font-semibold">{parts[0]}</span>{' '}
-          <span className="text-emerald-300">{parts.slice(1).join(' ')}</span>
+          <span className="text-pink-400 font-bold">{parts[0]}</span>{' '}
+          <span className="text-emerald-300 font-semibold">{parts.slice(1).join(' ')}</span>
         </span>
       );
+    }
+
+    if (line.trim().startsWith('//')) {
+      return <span className="text-amber-300/80 italic font-mono">{line}</span>;
     }
 
     if (line.includes('int main()')) {
       return (
         <span>
-          <span className="text-indigo-400 font-semibold">int</span>{' '}
-          <span className="text-yellow-300 font-semibold">main</span>
-          <span className="text-slate-300">() {'{'}</span>
+          <span className="text-cyan-400 font-bold">int</span>{' '}
+          <span className="text-yellow-300 font-bold">main</span>
+          <span className="text-purple-300 font-bold">() {'{'}</span>
         </span>
       );
     }
 
     if (line.includes('return 0;')) {
+      const parts = line.split('//');
       return (
         <span>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <span className="text-pink-400 font-semibold">return</span>{' '}
-          <span className="text-purple-300">0</span>
+          <span className="text-pink-400 font-bold">return</span>{' '}
+          <span className="text-amber-400 font-bold">0</span>
           <span className="text-slate-300">;</span>
+          {parts[1] && <span className="text-emerald-400/80 italic"> // {parts[1]}</span>}
         </span>
       );
     }
 
     if (line.includes('std::cout')) {
-      // Split around string literal
       const quoteMatch = line.match(/"([^"]*)"/);
-      if (quoteMatch) {
-        const textInside = quoteMatch[1];
-        return (
-          <span>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <span className="text-cyan-400">std</span>
-            <span className="text-slate-400">::</span>
-            <span className="text-blue-300">cout</span>{' '}
-            <span className="text-pink-400">&lt;&lt;</span>{' '}
-            <span className="text-emerald-300">"{textInside}"</span>{' '}
-            <span className="text-pink-400">&lt;&lt;</span>{' '}
-            <span className="text-cyan-400">std</span>
-            <span className="text-slate-400">::</span>
-            <span className="text-blue-300">endl</span>
-            <span className="text-slate-300">;</span>
-          </span>
-        );
-      }
+      const textInside = quoteMatch ? quoteMatch[1] : '';
+      return (
+        <span>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <span className="text-cyan-400 font-bold">std</span>
+          <span className="text-purple-400 font-bold">::</span>
+          <span className="text-yellow-300 font-bold">cout</span>{' '}
+          <span className="text-pink-400 font-bold">&lt;&lt;</span>{' '}
+          <span className="text-emerald-300 font-semibold bg-emerald-950/40 px-1 py-0.5 rounded">
+            "{textInside}"
+          </span>{' '}
+          <span className="text-pink-400 font-bold">&lt;&lt;</span>{' '}
+          <span className="text-cyan-400 font-bold">std</span>
+          <span className="text-purple-400 font-bold">::</span>
+          <span className="text-yellow-300 font-bold">endl</span>
+          <span className="text-slate-300">;</span>
+        </span>
+      );
     }
 
     if (line.trim() === '}') {
-      return <span className="text-slate-300">{'}'}</span>;
+      return <span className="text-purple-300 font-bold">{'}'}</span>;
     }
 
     return <span className="text-slate-200">{line}</span>;
@@ -174,114 +179,154 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#070a12] transition-all duration-500 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 lg:p-10 bg-[#060813] transition-all duration-500 overflow-hidden ${
         isExiting ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
       }`}
     >
-      {/* Background ambient lighting */}
+      {/* Super vibrant animated neon background aura */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[150px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-cyan-600/10 rounded-full blur-[140px]" />
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-fuchsia-600/25 via-pink-600/20 to-purple-800/10 rounded-full blur-[140px] animate-pulse-slow" />
+        <div className="absolute bottom-1/4 right-1/4 w-[650px] h-[650px] bg-gradient-to-tr from-cyan-500/25 via-teal-500/20 to-indigo-600/15 rounded-full blur-[150px] animate-pulse-slow" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-amber-500/10 rounded-full blur-[160px] animate-pulse-slow" style={{ animationDelay: '4s' }} />
+        
+        {/* Subtle retro matrix/grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#a855f712_1px,transparent_1px),linear-gradient(to_bottom,#06b6d412_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-60" />
       </div>
 
-      <div className="relative w-full max-w-3xl rounded-2xl bg-slate-900/90 border border-slate-700/80 shadow-2xl shadow-indigo-950/50 backdrop-blur-xl overflow-hidden flex flex-col">
-        {/* IDE Header Bar */}
-        <div className="flex items-center justify-between px-4 py-3 bg-slate-950/70 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
-            <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block" />
-            <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
-            <span className="ml-3 text-xs font-mono text-slate-400 flex items-center gap-1.5">
-              <span className="text-cyan-400 font-semibold">C++</span>
-              <span>main.cpp</span>
-            </span>
-          </div>
+      {/* Vibrant Gradient Framed IDE Container - Bigger & Zero Horizontal Scrollbar */}
+      <div className="relative w-full max-w-5xl rounded-3xl p-[2.5px] bg-gradient-to-r from-pink-500 via-purple-500 via-cyan-400 to-amber-400 shadow-[0_0_60px_rgba(168,85,247,0.35)] transition-all duration-300">
+        <div className="w-full rounded-[22px] bg-[#0c0f1d]/95 backdrop-blur-2xl flex flex-col overflow-hidden">
+          
+          {/* Top IDE Header */}
+          <div className="flex items-center justify-between px-5 py-3.5 bg-[#080b16] border-b border-purple-500/20">
+            {/* Window controls with playful colors */}
+            <div className="flex items-center gap-2.5">
+              <span className="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50 hover:scale-110 transition cursor-pointer" />
+              <span className="w-3.5 h-3.5 rounded-full bg-amber-400 shadow-sm shadow-amber-400/50 hover:scale-110 transition cursor-pointer" />
+              <span className="w-3.5 h-3.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50 hover:scale-110 transition cursor-pointer" />
+              
+              {/* File tab */}
+              <div className="ml-3 px-3 py-1 rounded-lg bg-purple-950/60 border border-purple-500/30 flex items-center gap-2 text-xs font-mono">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                <span className="text-cyan-300 font-bold">main.cpp</span>
+                <span className="text-pink-400 text-[10px] uppercase font-bold tracking-wider">⚡ Turbo C++</span>
+              </div>
+            </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleSkip}
-              className="text-xs text-slate-400 hover:text-slate-200 px-2.5 py-1 rounded-md hover:bg-slate-800 transition flex items-center gap-1 font-mono cursor-pointer"
-              title="Skip intro"
-            >
-              <FastForward className="w-3.5 h-3.5" />
-              <span>Skip</span>
-            </button>
+            {/* Header Right Actions */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleSkip}
+                className="text-xs text-slate-400 hover:text-pink-300 px-3 py-1.5 rounded-lg hover:bg-purple-900/30 transition flex items-center gap-1.5 font-mono cursor-pointer"
+                title="Skip to portfolio"
+              >
+                <FastForward className="w-3.5 h-3.5 text-pink-400" />
+                <span>Skip</span>
+              </button>
 
-            {/* Compile & Run Button */}
-            <button
-              onClick={handleCompileAndRun}
-              disabled={isCompiling}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold font-mono tracking-wide transition shadow-md cursor-pointer ${
-                isCompiling
-                  ? 'bg-emerald-600/40 text-emerald-300 border border-emerald-500/40 cursor-wait'
-                  : isTypingDone
-                  ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/30 animate-pulse'
-                  : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30'
-              }`}
-            >
-              {isCompiling ? (
-                <>
-                  <span className="w-3.5 h-3.5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
-                  <span>Compiling & Running...</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Compile & Run</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Code Editor Body */}
-        <div className="p-5 font-mono text-sm sm:text-base leading-relaxed bg-slate-950/90 text-slate-200 overflow-x-auto min-h-[220px]">
-          {displayedLines.map((line, idx) => (
-            <div key={idx} className="flex items-start">
-              <span className="w-8 shrink-0 text-slate-600 select-none text-right pr-4 text-xs pt-0.5">
-                {idx + 1}
-              </span>
-              <span className="flex-1 whitespace-pre">
-                {renderHighlightedLine(line)}
-                {idx === currentLineIndex && !isTypingDone && (
-                  <span className="inline-block w-2 h-4 bg-indigo-400 ml-0.5 animate-pulse align-middle" />
+              {/* Ultra Vibrant Run Button */}
+              <button
+                onClick={handleCompileAndRun}
+                disabled={isCompiling}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold font-mono tracking-wide transition-all duration-200 shadow-lg cursor-pointer ${
+                  isCompiling
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 shadow-emerald-500/40 cursor-wait'
+                    : isTypingDone
+                    ? 'bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 hover:brightness-110 text-white shadow-pink-500/40 scale-105 animate-pulse'
+                    : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:brightness-110 text-white shadow-indigo-600/30'
+                }`}
+              >
+                {isCompiling ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                    <span>Executing Genius Code...</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4 fill-current text-yellow-300" />
+                    <span>Compile & Run (F5) 🔥</span>
+                  </>
                 )}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Console / Terminal Section */}
-        {compileOutput.length > 0 && (
-          <div className="border-t border-slate-800 bg-black/60 p-4 font-mono text-xs sm:text-sm">
-            <div className="flex items-center gap-2 text-slate-400 mb-2 pb-1 border-b border-slate-800/80">
-              <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="text-slate-300 font-semibold">Terminal Output</span>
-              {compileOutput.length >= 3 && (
-                <span className="flex items-center gap-1 text-emerald-400 text-xs ml-auto">
-                  <CheckCircle2 className="w-3 h-3" />
-                  <span>Process exited with code 0</span>
-                </span>
-              )}
-            </div>
-            <div className="space-y-1">
-              {compileOutput.map((out, i) => (
-                <div
-                  key={i}
-                  className={`${
-                    out.startsWith('$')
-                      ? 'text-cyan-400 font-medium'
-                      : out.includes('Build Finished')
-                      ? 'text-emerald-400'
-                      : 'text-slate-100 font-semibold pl-2 border-l-2 border-indigo-500'
-                  }`}
-                >
-                  {out}
-                </div>
-              ))}
+              </button>
             </div>
           </div>
-        )}
+
+          {/* Bigger Code Editor Body - ZERO HORIZONTAL SCROLLBAR */}
+          <div className="p-6 sm:p-8 font-mono text-sm sm:text-base lg:text-lg leading-relaxed bg-[#0a0d1a] text-slate-100 overflow-x-hidden min-h-[260px] sm:min-h-[300px]">
+            {displayedLines.map((line, idx) => (
+              <div key={idx} className="flex items-start group">
+                <span className="w-10 shrink-0 text-slate-600 select-none text-right pr-4 text-xs sm:text-sm pt-0.5 font-mono group-hover:text-purple-400 transition-colors">
+                  {idx + 1}
+                </span>
+                <span className="flex-1 whitespace-pre-wrap break-words">
+                  {renderHighlightedLine(line)}
+                  {idx === currentLineIndex && !isTypingDone && (
+                    <span className="inline-block w-2.5 h-5 bg-gradient-to-b from-pink-400 to-cyan-400 ml-1 animate-pulse align-middle rounded-sm shadow-[0_0_8px_rgba(244,63,94,0.8)]" />
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Super Vibrant & Funny Output Console */}
+          {outputStep > 0 && (
+            <div className="border-t-2 border-purple-500/30 bg-[#070914] p-5 sm:p-6 font-mono text-xs sm:text-sm overflow-hidden animate-fadeIn">
+              {/* Terminal Title Bar */}
+              <div className="flex items-center gap-2 text-slate-400 mb-3 pb-2 border-b border-purple-900/40">
+                <Sparkles className="w-4 h-4 text-yellow-400 animate-spin" style={{ animationDuration: '4s' }} />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-cyan-400 font-bold uppercase tracking-wider text-xs">
+                  Execution Output Console
+                </span>
+                <span className="ml-auto text-[11px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/40 font-semibold flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3" />
+                  <span>Build Succeeded • 0 bugs found</span>
+                </span>
+              </div>
+
+              {/* Funny Animated Output Lines */}
+              <div className="space-y-2">
+                {outputStep >= 1 && (
+                  <div className="flex items-center gap-2 text-amber-300 font-medium">
+                    <Coffee className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span>{FUNNY_OUTPUTS[0].text}</span>
+                  </div>
+                )}
+                {outputStep >= 2 && (
+                  <div className="flex items-center gap-2 text-cyan-300 font-medium">
+                    <span className="text-cyan-400 font-bold">⚡</span>
+                    <span>{FUNNY_OUTPUTS[1].text}</span>
+                  </div>
+                )}
+                {outputStep >= 3 && (
+                  <div className="text-pink-400 font-bold text-sm tracking-wide pt-1">
+                    {FUNNY_OUTPUTS[2].text}
+                  </div>
+                )}
+                {outputStep >= 4 && (
+                  <div className="pl-4 py-1 border-l-4 border-cyan-400 bg-cyan-950/30 rounded-r-lg">
+                    <span className="text-white text-base sm:text-lg font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-purple-200">
+                      {FUNNY_OUTPUTS[3].text}
+                    </span>
+                  </div>
+                )}
+                {outputStep >= 5 && (
+                  <div className="pl-4 py-1 border-l-4 border-fuchsia-400 bg-fuchsia-950/30 rounded-r-lg">
+                    <span className="text-pink-200 text-sm sm:text-base font-semibold">
+                      {FUNNY_OUTPUTS[4].text}
+                    </span>
+                  </div>
+                )}
+                {outputStep >= 6 && (
+                  <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm sm:text-base pt-2 animate-bounce">
+                    <Rocket className="w-5 h-5 text-emerald-400 shrink-0" />
+                    <span>{FUNNY_OUTPUTS[5].text}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+        </div>
       </div>
     </div>
   );
