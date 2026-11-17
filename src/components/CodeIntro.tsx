@@ -29,22 +29,22 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Deliberate, readable typing effect
+  // Fast & energetic typing effect
   useEffect(() => {
     if (currentLineIndex >= CPP_CODE_LINES.length) {
       setIsTypingDone(true);
-      // Give viewers ample time (2 seconds) to read the completed code before compiling
+      // No pause: immediately compile and run right after code is typed!
       timerRef.current = setTimeout(() => {
         handleCompileAndRun();
-      }, 2000);
+      }, 150);
       return;
     }
 
     const targetLine = CPP_CODE_LINES[currentLineIndex];
 
     if (currentCharIndex < targetLine.length) {
-      // Readable typing cadence: 45ms to 65ms per character
-      const speed = targetLine.length === 0 ? 50 : Math.floor(Math.random() * 20) + 45;
+      // Fast typing speed: 14ms to 24ms per character
+      const speed = targetLine.length === 0 ? 20 : Math.floor(Math.random() * 10) + 14;
       timerRef.current = setTimeout(() => {
         setDisplayedLines(prev => {
           const next = [...prev];
@@ -54,12 +54,12 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
         setCurrentCharIndex(prev => prev + 1);
       }, speed);
     } else {
-      // Natural pause between lines so viewers can read each line comfortably
+      // Snappy line switch
       timerRef.current = setTimeout(() => {
         setDisplayedLines(prev => [...prev, '']);
         setCurrentLineIndex(prev => prev + 1);
         setCurrentCharIndex(0);
-      }, 320);
+      }, 70);
     }
 
     return () => {
@@ -72,37 +72,32 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
     setIsCompiling(true);
     if (timerRef.current) clearTimeout(timerRef.current);
 
-    // Show full code if clicked early
+    // Show full code immediately
     setDisplayedLines(CPP_CODE_LINES);
     setIsTypingDone(true);
 
-    // Stage 1: Initial compilation with imported qualities
-    setCompileMessage('⚡ Compiling with <dedication> and <compassion>...');
+    // Immediate compile message
+    setCompileMessage("🚀 Leading you into Thiru's World...");
 
-    // Stage 2: Leading you into Thiru's World (with comfortable reading delay)
-    setTimeout(() => {
-      setCompileMessage("🚀 Leading you into Thiru's World...");
-    }, 1400);
-
-    // Stage 3: Welcome and smooth transition
+    // Swift, seamless transition
     setTimeout(() => {
       setCompileMessage("✨ Welcome to Thiru's World!");
-    }, 2800);
+    }, 700);
 
-    // Transition to main homepage
+    // Transition straight into the portfolio homepage
     setTimeout(() => {
       setIsExiting(true);
       setTimeout(() => {
         onComplete();
-      }, 500);
-    }, 3600);
+      }, 350);
+    }, 1200);
   };
 
   const handleSkip = () => {
     setIsExiting(true);
     setTimeout(() => {
       onComplete();
-    }, 150);
+    }, 100);
   };
 
   // Pure Left-to-Right Tokenizer (Never pre-renders quotes or future words)
@@ -149,7 +144,6 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
       if (text[i] === '"') {
         const end = text.indexOf('"', i + 1);
         if (end !== -1) {
-          // Both quotes typed
           tokens.push(
             <span key={i} className="text-emerald-300 font-semibold bg-emerald-950/40 px-1 py-0.5 rounded">
               {text.slice(i, end + 1)}
@@ -157,7 +151,6 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
           );
           i = end + 1;
         } else {
-          // Closing quote NOT typed yet! Show ONLY the opening quote and text typed so far
           tokens.push(
             <span key={i} className="text-emerald-300 font-semibold bg-emerald-950/40 px-1 py-0.5 rounded">
               {text.slice(i)}
@@ -248,7 +241,7 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-10 bg-[#09080e] transition-all duration-500 overflow-hidden ${
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-10 bg-[#09080e] transition-all duration-400 overflow-hidden ${
         isExiting ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
       }`}
     >
@@ -318,7 +311,7 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
             </div>
           </div>
 
-          {/* Code Editor Body - ZERO HORIZONTAL SCROLLBAR, Natural Character Typing */}
+          {/* Code Editor Body - ZERO HORIZONTAL SCROLLBAR, Fast Natural Typing */}
           <div className="p-6 sm:p-8 font-mono text-sm sm:text-base lg:text-lg leading-relaxed bg-[#0c0a14] text-slate-100 overflow-x-hidden min-h-[300px] sm:min-h-[340px]">
             {displayedLines.map((line, idx) => (
               <div key={idx} className="flex items-start group">
@@ -337,9 +330,9 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
 
           {/* Compiler Status Banner - "Leading you into Thiru's World" */}
           {isCompiling && (
-            <div className="border-t-2 border-purple-500/30 bg-[#07060c] p-5 sm:p-6 font-mono text-center overflow-hidden animate-fadeIn">
-              <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-950/80 via-rose-950/80 to-amber-950/80 border border-rose-500/40 shadow-xl shadow-fuchsia-950/50">
-                <Sparkles className="w-5 h-5 text-amber-400 animate-spin" style={{ animationDuration: '3s' }} />
+            <div className="border-t-2 border-purple-500/30 bg-[#07060c] p-4 sm:p-5 font-mono text-center overflow-hidden animate-fadeIn">
+              <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-purple-950/80 via-rose-950/80 to-amber-950/80 border border-rose-500/40 shadow-xl shadow-fuchsia-950/50">
+                <Sparkles className="w-5 h-5 text-amber-400 animate-spin" style={{ animationDuration: '2s' }} />
                 <span className="text-base sm:text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-rose-300 to-emerald-300 tracking-wide">
                   {compileMessage}
                 </span>
@@ -347,7 +340,7 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
               </div>
               
               {/* Progress bar line */}
-              <div className="w-full max-w-md mx-auto mt-4 h-1.5 bg-slate-900 rounded-full overflow-hidden">
+              <div className="w-full max-w-md mx-auto mt-3 h-1.5 bg-slate-900 rounded-full overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-pink-500 via-purple-500 via-amber-400 to-emerald-400 animate-pulse rounded-full" />
               </div>
             </div>
