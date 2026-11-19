@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Hero } from './components/Hero';
 import { AboutPage } from './pages/AboutPage';
+import { ProjectsPage } from './pages/ProjectsPage';
+import { ExperiencePage } from './pages/ExperiencePage';
+import { CertificatesPage } from './pages/CertificatesPage';
+import { ContactPage } from './pages/ContactPage';
 import { DownloadToast } from './components/DownloadToast';
 import { CodeIntro } from './components/CodeIntro';
 import { PORTFOLIO_CONFIG } from './config/portfolio';
@@ -24,7 +28,7 @@ export function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-[#08080a] text-zinc-100 flex flex-col font-sans selection:bg-violet-500/20 selection:text-violet-200">
-        {/* Terminal Code Introduction */}
+        {/* Terminal Code Introduction on initial visit */}
         {showIntro && (
           <CodeIntro onComplete={() => setShowIntro(false)} />
         )}
@@ -41,6 +45,10 @@ export function App() {
               }
             />
             <Route path="/about" element={<AboutPage onDownloadCV={handleDownloadCV} />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/experience" element={<ExperiencePage />} />
+            <Route path="/certificates" element={<CertificatesPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </main>
 
