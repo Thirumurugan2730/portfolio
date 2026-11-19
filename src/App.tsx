@@ -11,7 +11,6 @@ export function App() {
   const [showIntro, setShowIntro] = useState(true);
 
   const handleDownloadCV = () => {
-    // Trigger download of the PDF file
     const link = document.createElement('a');
     link.href = PORTFOLIO_CONFIG.cv.downloadUrl;
     link.setAttribute('download', PORTFOLIO_CONFIG.cv.fileName);
@@ -19,14 +18,13 @@ export function App() {
     link.click();
     document.body.removeChild(link);
 
-    // Show feedback toast confirming download & placeholder status
     setShowToast(true);
   };
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
-        {/* C++ Code Typing & Compilation Intro */}
+      <div className="min-h-screen bg-[#08080a] text-zinc-100 flex flex-col font-sans selection:bg-violet-500/20 selection:text-violet-200">
+        {/* Terminal Code Introduction */}
         {showIntro && (
           <CodeIntro onComplete={() => setShowIntro(false)} />
         )}

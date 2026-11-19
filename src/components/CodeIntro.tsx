@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, FastForward, Sparkles } from 'lucide-react';
+import { Play, FastForward, CheckCircle2 } from 'lucide-react';
 
 interface CodeIntroProps {
   onComplete: () => void;
@@ -9,7 +9,6 @@ const CPP_CODE_LINES = [
   '#include <iostream>',
   '#include <dedication>',
   '#include <compassion>',
-  '#include <passion>',
   '',
   'int main() {',
   '    std::cout << "Thirumurugan S" << std::endl;',
@@ -29,13 +28,13 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Typing effect
+  // Natural typing effect
   useEffect(() => {
     if (currentLineIndex >= CPP_CODE_LINES.length) {
       setIsTypingDone(true);
       timerRef.current = setTimeout(() => {
         handleCompileAndRun();
-      }, 200);
+      }, 250);
       return;
     }
 
@@ -56,7 +55,7 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
         setDisplayedLines(prev => [...prev, '']);
         setCurrentLineIndex(prev => prev + 1);
         setCurrentCharIndex(0);
-      }, 120);
+      }, 90);
     }
 
     return () => {
@@ -72,18 +71,18 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
     setDisplayedLines(CPP_CODE_LINES);
     setIsTypingDone(true);
 
-    setCompileMessage('⚡ Compiling with dedication & compassion...');
+    setCompileMessage('Compiling main.cpp...');
 
     setTimeout(() => {
-      setCompileMessage("🚀 Entering Thiru's World...");
-    }, 700);
+      setCompileMessage("Build succeeded. Launching portfolio...");
+    }, 450);
 
     setTimeout(() => {
       setIsExiting(true);
       setTimeout(() => {
         onComplete();
-      }, 450);
-    }, 1300);
+      }, 350);
+    }, 850);
   };
 
   const handleSkip = () => {
@@ -93,7 +92,7 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
     }, 120);
   };
 
-  // Pure Tokenizer - neat, elegant syntax highlighting
+  // Pure Tokenizer - Left to right, no premature quotes
   const renderTokenizedLine = (text: string) => {
     if (!text) return <span>&nbsp;</span>;
 
@@ -107,7 +106,7 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
       }
 
       if (text.startsWith('#include', i)) {
-        tokens.push(<span key={i} className="text-purple-400 font-semibold">#include</span>);
+        tokens.push(<span key={i} className="text-violet-400 font-semibold">#include</span>);
         i += 8;
         continue;
       }
@@ -116,15 +115,14 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
         const end = text.indexOf('>', i);
         if (end !== -1) {
           const content = text.slice(i, end + 1);
-          const isHeart = content.includes('dedication') || content.includes('compassion') || content.includes('passion');
           tokens.push(
-            <span key={i} className={`font-medium ${isHeart ? 'text-amber-300/90' : 'text-emerald-400'}`}>
+            <span key={i} className="text-emerald-400/90 font-medium">
               {content}
             </span>
           );
           i = end + 1;
         } else {
-          tokens.push(<span key={i} className="text-emerald-400 font-medium">{text.slice(i)}</span>);
+          tokens.push(<span key={i} className="text-emerald-400/90 font-medium">{text.slice(i)}</span>);
           break;
         }
         continue;
@@ -163,13 +161,13 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
       }
 
       if (text.startsWith('int', i) && (i + 3 === text.length || /[\s(]/.test(text[i + 3]))) {
-        tokens.push(<span key={i} className="text-purple-400 font-medium">int</span>);
+        tokens.push(<span key={i} className="text-violet-400 font-medium">int</span>);
         i += 3;
         continue;
       }
 
       if (text.startsWith('main', i) && (i + 4 === text.length || /[\s(]/.test(text[i + 4]))) {
-        tokens.push(<span key={i} className="text-amber-300 font-semibold">main</span>);
+        tokens.push(<span key={i} className="text-amber-300 font-medium">main</span>);
         i += 4;
         continue;
       }
@@ -181,25 +179,25 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
       }
 
       if (text.startsWith('cout', i) && (i + 4 === text.length || /[\s<]/.test(text[i + 4]))) {
-        tokens.push(<span key={i} className="text-purple-300 font-medium">cout</span>);
+        tokens.push(<span key={i} className="text-violet-300 font-medium">cout</span>);
         i += 4;
         continue;
       }
 
       if (text.startsWith('endl', i) && (i + 4 === text.length || /[\s;]/.test(text[i + 4]))) {
-        tokens.push(<span key={i} className="text-purple-300 font-medium">endl</span>);
+        tokens.push(<span key={i} className="text-violet-300 font-medium">endl</span>);
         i += 4;
         continue;
       }
 
       if (text.startsWith('return', i) && (i + 6 === text.length || /\s/.test(text[i + 6]))) {
-        tokens.push(<span key={i} className="text-purple-400 font-semibold">return</span>);
+        tokens.push(<span key={i} className="text-violet-400 font-semibold">return</span>);
         i += 6;
         continue;
       }
 
       if (text[i] === '0' && (i === 0 || /\s/.test(text[i - 1])) && (i + 1 === text.length || /;/.test(text[i + 1]))) {
-        tokens.push(<span key={i} className="text-amber-400 font-semibold">0</span>);
+        tokens.push(<span key={i} className="text-amber-400 font-medium">0</span>);
         i++;
         continue;
       }
@@ -219,103 +217,93 @@ export const CodeIntro: React.FC<CodeIntroProps> = ({ onComplete }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-10 bg-[#070709] transition-all duration-500 overflow-hidden ${
-        isExiting ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-10 bg-[#08080a] transition-all duration-300 overflow-hidden ${
+        isExiting ? 'opacity-0 scale-[0.99] pointer-events-none' : 'opacity-100 scale-100'
       }`}
     >
-      {/* Subtle, Animatic Ambient Lighting Beams */}
+      {/* Subtle Background Radial Glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-purple-900/15 rounded-full blur-[160px] animate-ambient-drift" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-zinc-700/10 rounded-full blur-[140px] animate-ambient-drift" style={{ animationDelay: '3s' }} />
-        <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:2rem_2rem] opacity-30" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-violet-950/20 rounded-full blur-[140px] animate-ambient-drift" />
       </div>
 
-      {/* Editor Frame - Clean, Neat, Professional Luxury Aesthetics */}
-      <div className="relative w-full max-w-4xl rounded-2xl border border-zinc-800/90 bg-zinc-950/90 shadow-2xl shadow-black/80 backdrop-blur-xl overflow-hidden flex flex-col transition-all duration-300">
+      {/* Editor Frame - Clean, Professional Developer Terminal */}
+      <div className="relative w-full max-w-3xl rounded-xl border border-zinc-800 bg-[#0e0e12]/95 shadow-2xl shadow-black/80 backdrop-blur-xl overflow-hidden flex flex-col">
         
-        {/* Animated Laser Beam Scanner when Compiling */}
-        {isCompiling && (
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-20">
-            <div className="w-1/2 h-full bg-gradient-to-r from-transparent via-purple-500/10 to-transparent animate-beam-scan" />
-          </div>
-        )}
-
-        {/* IDE Header Bar */}
-        <div className="flex items-center justify-between px-5 py-3.5 bg-zinc-900/60 border-b border-zinc-800/80">
+        {/* Editor Titlebar */}
+        <div className="flex items-center justify-between px-4 py-2.5 bg-[#121217] border-b border-zinc-800/80">
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-rose-500/80 hover:bg-rose-500 transition cursor-pointer" />
-            <span className="w-3 h-3 rounded-full bg-amber-500/80 hover:bg-amber-500 transition cursor-pointer" />
-            <span className="w-3 h-3 rounded-full bg-emerald-500/80 hover:bg-emerald-500 transition cursor-pointer" />
+            <span className="w-3 h-3 rounded-full bg-zinc-700/80" />
+            <span className="w-3 h-3 rounded-full bg-zinc-700/80" />
+            <span className="w-3 h-3 rounded-full bg-zinc-700/80" />
             
-            <div className="ml-3 px-3 py-1 rounded-md bg-zinc-800/60 border border-zinc-700/50 flex items-center gap-2 text-xs font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-              <span className="text-zinc-200 font-medium">main.cpp</span>
+            <div className="ml-3 px-2.5 py-0.5 rounded bg-zinc-800/60 border border-zinc-700/40 flex items-center gap-1.5 text-xs font-mono text-zinc-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+              <span>main.cpp</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <button
               onClick={handleSkip}
-              className="text-xs text-zinc-400 hover:text-zinc-100 px-3 py-1 rounded-md hover:bg-zinc-800/80 transition flex items-center gap-1.5 font-mono cursor-pointer"
-              title="Skip intro"
+              className="text-xs text-zinc-400 hover:text-zinc-200 px-2.5 py-1 rounded hover:bg-zinc-800/60 transition flex items-center gap-1 font-mono cursor-pointer"
+              title="Skip to homepage"
             >
-              <FastForward className="w-3.5 h-3.5 text-zinc-400" />
+              <FastForward className="w-3 h-3 text-zinc-400" />
               <span>Skip</span>
             </button>
 
-            {/* Run Button */}
+            {/* Compile & Run Button */}
             <button
               onClick={handleCompileAndRun}
               disabled={isCompiling}
-              className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-semibold font-mono tracking-wide transition-all duration-200 cursor-pointer shadow-md ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium font-mono transition-all duration-200 cursor-pointer ${
                 isCompiling
-                  ? 'bg-purple-600/30 text-purple-300 border border-purple-500/40 cursor-wait'
+                  ? 'bg-violet-600/20 text-violet-300 border border-violet-500/30 cursor-wait'
                   : isTypingDone
-                  ? 'bg-white hover:bg-zinc-200 text-zinc-950 font-bold shadow-[0_0_20px_rgba(255,255,255,0.3)] animate-pulse'
+                  ? 'bg-violet-600 hover:bg-violet-500 text-white font-semibold shadow-sm'
                   : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700'
               }`}
             >
               {isCompiling ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
+                  <span className="w-3 h-3 border-2 border-violet-400 border-t-transparent rounded-full animate-spin" />
                   <span>Running...</span>
                 </>
               ) : (
                 <>
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Compile & Run</span>
+                  <Play className="w-3 h-3 fill-current text-zinc-300" />
+                  <span>Run</span>
                 </>
               )}
             </button>
           </div>
         </div>
 
-        {/* Code Body - Neat, Clean, No Scrollbar */}
-        <div className="p-6 sm:p-8 font-mono text-sm sm:text-base leading-relaxed bg-[#09090c] text-zinc-200 overflow-x-hidden min-h-[290px] sm:min-h-[320px]">
+        {/* Code Content */}
+        <div className="p-5 sm:p-6 font-mono text-xs sm:text-sm leading-relaxed bg-[#0b0b0e] text-zinc-200 overflow-x-hidden min-h-[250px]">
           {displayedLines.map((line, idx) => (
             <div key={idx} className="flex items-start">
-              <span className="w-8 shrink-0 text-zinc-600 select-none text-right pr-4 text-xs sm:text-sm pt-0.5 font-mono">
+              <span className="w-7 shrink-0 text-zinc-600 select-none text-right pr-3.5 text-xs pt-0.5 font-mono">
                 {idx + 1}
               </span>
               <span className="flex-1 whitespace-pre-wrap break-words">
                 {renderTokenizedLine(line)}
                 {idx === currentLineIndex && !isTypingDone && (
-                  <span className="inline-block w-2 h-4 bg-purple-400 ml-1 animate-pulse align-middle rounded-xs" />
+                  <span className="inline-block w-1.5 h-3.5 bg-violet-400 ml-0.5 animate-pulse align-middle" />
                 )}
               </span>
             </div>
           ))}
         </div>
 
-        {/* Compiler Status Notification Banner */}
+        {/* Clean Status Banner */}
         {isCompiling && (
-          <div className="border-t border-zinc-800/80 bg-zinc-950 p-3.5 font-mono text-center animate-fadeIn">
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 shadow-inner">
-              <Sparkles className="w-4 h-4 text-purple-400 animate-spin" style={{ animationDuration: '3s' }} />
-              <span className="text-xs sm:text-sm font-medium text-zinc-200 tracking-wide">
-                {compileMessage}
-              </span>
+          <div className="border-t border-zinc-800/80 bg-[#101015] px-4 py-2.5 flex items-center justify-between font-mono text-xs text-zinc-300 animate-fadeIn">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-3.5 h-3.5 text-violet-400" />
+              <span>{compileMessage}</span>
             </div>
+            <span className="text-[11px] text-zinc-500">Exit Code: 0</span>
           </div>
         )}
 

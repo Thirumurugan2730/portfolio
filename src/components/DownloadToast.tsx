@@ -13,7 +13,7 @@ export const DownloadToast: React.FC<DownloadToastProps> = ({ isOpen, onClose })
 
     const timer = setTimeout(() => {
       onClose();
-    }, 5000);
+    }, 4500);
 
     return () => clearTimeout(timer);
   }, [isOpen, onClose]);
@@ -24,32 +24,32 @@ export const DownloadToast: React.FC<DownloadToastProps> = ({ isOpen, onClose })
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-6 right-6 z-50 max-w-md w-[calc(100vw-3rem)] backdrop-blur-2xl bg-zinc-900/95 border border-zinc-700/80 rounded-2xl p-4 shadow-2xl shadow-black/90 transition-all duration-300 animate-float-gentle"
+      className="fixed bottom-6 right-6 z-50 max-w-sm w-[calc(100vw-3rem)] glass-surface rounded-xl p-4 shadow-xl shadow-black/80 transition-all duration-300 animate-toast-slide"
     >
       <div className="flex items-start gap-3">
-        <div className="p-2 rounded-xl bg-zinc-800 text-zinc-200 border border-zinc-700 shrink-0">
-          <FileText className="w-5 h-5" />
+        <div className="p-2 rounded-lg bg-zinc-800/80 text-violet-400 border border-zinc-700/60 shrink-0">
+          <FileText className="w-4 h-4" />
         </div>
 
-        <div className="flex-1 pr-2">
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-400 mb-1">
+        <div className="flex-1 pr-1">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400 mb-0.5">
             <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Download Triggered</span>
+            <span>Download Initiated</span>
           </div>
-          <h4 className="text-sm font-semibold text-zinc-100">
+          <h4 className="text-xs font-medium text-zinc-200">
             {PORTFOLIO_CONFIG.cv.fileName}
           </h4>
-          <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
-            {PORTFOLIO_CONFIG.cv.notice}
+          <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed">
+            Placeholder CV downloaded. Integration ready for official document.
           </p>
         </div>
 
         <button
           onClick={onClose}
-          className="text-zinc-500 hover:text-zinc-200 p-1 rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer"
+          className="text-zinc-500 hover:text-zinc-300 p-1 rounded hover:bg-zinc-800 transition-colors cursor-pointer"
           aria-label="Close notification"
         >
-          <X className="w-4 h-4" />
+          <X className="w-3.5 h-3.5" />
         </button>
       </div>
     </div>

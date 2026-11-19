@@ -1,49 +1,73 @@
 @import "tailwindcss";
 
 @layer base {
+  :root {
+    --bg-base: #08080a;
+    --surface-1: #111115;
+    --surface-2: #18181f;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-accent: rgba(139, 92, 246, 0.3);
+    --text-primary: #f4f4f6;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    --violet-accent: #8b5cf6;
+  }
+
   html {
     scroll-behavior: smooth;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Inter', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Inter', 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
   }
 
   body {
     margin: 0;
     padding: 0;
-    background-color: #070709;
-    color: #f4f4f6;
     overflow-x: hidden;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Accessibility: Prefers Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-/* Animatic Keyframe Motions */
+/* Subtle, Controlled Animation Keyframes */
 @keyframes ambientDrift {
   0%, 100% {
-    transform: translate(0px, 0px) scale(1);
-    opacity: 0.35;
+    transform: translate(0, 0) scale(1);
+    opacity: 0.25;
   }
-  33% {
-    transform: translate(30px, -40px) scale(1.08);
-    opacity: 0.55;
-  }
-  66% {
-    transform: translate(-25px, 20px) scale(0.95);
-    opacity: 0.4;
-  }
-}
-
-@keyframes beamScan {
-  0% {
-    transform: translateX(-100%) skewX(-20deg);
-  }
-  100% {
-    transform: translateX(200%) skewX(-20deg);
+  50% {
+    transform: translate(20px, -20px) scale(1.05);
+    opacity: 0.38;
   }
 }
 
 @keyframes heroReveal {
   from {
     opacity: 0;
-    transform: translateY(24px) scale(0.97);
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
   }
   to {
     opacity: 1;
@@ -51,35 +75,32 @@
   }
 }
 
-@keyframes floatGentle {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
 .animate-ambient-drift {
-  animation: ambientDrift 14s ease-in-out infinite;
-}
-
-.animate-beam-scan {
-  animation: beamScan 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: ambientDrift 16s ease-in-out infinite;
 }
 
 .animate-hero-reveal {
-  animation: heroReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: heroReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-float-gentle {
-  animation: floatGentle 5s ease-in-out infinite;
+.animate-toast-slide {
+  animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Glassmorphism */
-.glass-panel-luxury {
-  background: rgba(18, 18, 24, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+/* Reusable Professional Utility Classes */
+.glass-surface {
+  background: rgba(17, 17, 21, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-surface-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-surface-hover:hover {
+  background: rgba(24, 24, 31, 0.85);
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateY(-2px);
 }
